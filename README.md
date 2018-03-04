@@ -25,4 +25,5 @@ https://github.com/wildfly-extras/wildfly-microprofile-config#install-on-wildfly
 
 
 ## Links
-https://microprofile.io/project/eclipse/microprofile-config
+* https://microprofile.io/project/eclipse/microprofile-config
+* https://github.com/rikcarve/consulkv-maven-plugin
