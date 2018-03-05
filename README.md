@@ -1,3 +1,5 @@
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/ch.carve/mp-config-consul/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/ch.carve/mp-config-consul/)
+
 # mp-config-consul
 A eclipse microprofile config (1.2) extension which uses [Consul](https://www.consul.io/) as source.
 
