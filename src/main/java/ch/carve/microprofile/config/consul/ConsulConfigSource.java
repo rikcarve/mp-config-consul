@@ -18,7 +18,8 @@ public class ConsulConfigSource implements ConfigSource {
 
     private Map<String, TimedEntry> cache = new ConcurrentHashMap<>();
     private ConsulClient client = new ConsulClient(getEnvOrSystemProperty("consul.host", "localhost"));
-    private long validity = Long.valueOf(getEnvOrSystemProperty("consul.configsource.validity", "10")) * 1000L;
+    private long validity = Long.valueOf(getEnvOrSystemProperty("consul.configsource.validity", "30")) * 1000L;
+    private String prefix = addSlash(getEnvOrSystemProperty("consul.prefix", ""));
 
     @Override
     public Map<String, String> getProperties() {
@@ -36,7 +37,7 @@ public class ConsulConfigSource implements ConfigSource {
             logger.debug("load {} from consul", propertyName);
             GetValue value = null;
             try {
-                value = client.getKVValue(propertyName).getValue();
+                value = client.getKVValue(prefix + propertyName).getValue();
             } catch (Exception e) {
                 logger.warn("consul getKVValue() failed", e);
             }
@@ -63,6 +64,10 @@ public class ConsulConfigSource implements ConfigSource {
 
     private static String getEnvOrSystemProperty(String key, String defaultValue) {
         return Optional.ofNullable(System.getenv(key)).orElse(System.getProperty(key, defaultValue));
+    }
+
+    private String addSlash(String envOrSystemProperty) {
+        return envOrSystemProperty.isEmpty() ? "" : envOrSystemProperty + "/";
     }
 
     class TimedEntry {
