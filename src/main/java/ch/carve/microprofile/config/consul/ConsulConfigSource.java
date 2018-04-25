@@ -1,7 +1,6 @@
 package ch.carve.microprofile.config.consul;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -16,10 +15,9 @@ public class ConsulConfigSource implements ConfigSource {
 
     private static final Logger logger = LoggerFactory.getLogger(ConsulConfigSource.class);
 
+    private Configuration config = new Configuration();
     private Map<String, TimedEntry> cache = new ConcurrentHashMap<>();
-    private ConsulClient client = new ConsulClient(getEnvOrSystemProperty("consul.host", "localhost"));
-    private long validity = Long.valueOf(getEnvOrSystemProperty("consul.configsource.validity", "30")) * 1000L;
-    private String prefix = addSlash(getEnvOrSystemProperty("consul.prefix", ""));
+    private ConsulClient client = new ConsulClient(config.getConsulHost());
 
     @Override
     public Map<String, String> getProperties() {
@@ -37,7 +35,7 @@ public class ConsulConfigSource implements ConfigSource {
             logger.debug("load {} from consul", propertyName);
             GetValue value = null;
             try {
-                value = client.getKVValue(prefix + propertyName).getValue();
+                value = client.getKVValue(config.getPrefix() + propertyName).getValue();
             } catch (Exception e) {
                 logger.warn("consul getKVValue() failed", e);
             }
@@ -62,14 +60,6 @@ public class ConsulConfigSource implements ConfigSource {
         return 120;
     }
 
-    private static String getEnvOrSystemProperty(String key, String defaultValue) {
-        return Optional.ofNullable(System.getenv(key)).orElse(System.getProperty(key, defaultValue));
-    }
-
-    private String addSlash(String envOrSystemProperty) {
-        return envOrSystemProperty.isEmpty() ? "" : envOrSystemProperty + "/";
-    }
-
     class TimedEntry {
         private final String value;
         private final long timestamp;
@@ -84,7 +74,7 @@ public class ConsulConfigSource implements ConfigSource {
         }
 
         public boolean isExpired() {
-            return (timestamp + validity) < System.currentTimeMillis();
+            return (timestamp + config.getValidity()) < System.currentTimeMillis();
         }
     }
 }
