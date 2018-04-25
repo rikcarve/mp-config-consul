@@ -8,7 +8,7 @@ public class Configuration {
     private StringSubstitutor substitutor = new StringSubstitutor(s -> getEnvOrSystemProperty(s, ""));
     private String consulHost = substitutor.replace(getEnvOrSystemProperty("consul.host", "localhost"));
     private long validity = Long.valueOf(getEnvOrSystemProperty("consul.configsource.validity", "30")) * 1000L;
-    private String prefix = addSlash((getEnvOrSystemProperty("consul.prefix", "")));
+    private String prefix = addSlash(substitutor.replace(getEnvOrSystemProperty("consul.prefix", "")));
 
     public long getValidity() {
         return validity;

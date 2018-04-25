@@ -35,6 +35,16 @@ public class ConfigurationTest {
     }
 
     @Test
+    public void testGetPrefix_withSubstitution() throws Exception {
+        System.setProperty("consul.prefix", "applications/${appname}");
+        System.setProperty("appname", "jax");
+        Configuration config = new Configuration();
+        assertEquals("applications/jax/", config.getPrefix());
+        System.clearProperty("consul.prefix");
+        System.clearProperty("appName");
+    }
+
+    @Test
     public void testGetConsulHost() throws Exception {
         Configuration config = new Configuration();
         assertEquals("localhost", config.getConsulHost());
