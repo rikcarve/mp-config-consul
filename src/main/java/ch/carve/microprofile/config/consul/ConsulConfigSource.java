@@ -15,9 +15,10 @@ public class ConsulConfigSource implements ConfigSource {
 
     private static final Logger logger = LoggerFactory.getLogger(ConsulConfigSource.class);
 
-    private Configuration config = new Configuration();
+    Configuration config = new Configuration();
     private Map<String, TimedEntry> cache = new ConcurrentHashMap<>();
-    private ConsulClient client = new ConsulClient(config.getConsulHost());
+    ConsulClient client = new ConsulClient(config.getConsulHost());
+    private TimedEntry consulError = null;
 
     @Override
     public Map<String, String> getProperties() {
@@ -37,7 +38,13 @@ public class ConsulConfigSource implements ConfigSource {
             try {
                 value = client.getKVValue(config.getPrefix() + propertyName).getValue();
             } catch (Exception e) {
-                logger.warn("consul getKVValue() failed", e);
+                if (consulError == null || consulError.isExpired()) {
+                    logger.warn("consul getKVValue failed, {}" , e.getMessage());
+                    consulError = new TimedEntry("");
+                }
+                if (entry != null) {
+                    return entry.getValue();
+                }
             }
             if (value == null) {
                 cache.put(propertyName, new TimedEntry(null));
