@@ -1,4 +1,6 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/ch.carve/mp-config-consul/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/ch.carve/mp-config-consul/)
+[![Build Status](https://travis-ci.org/rikcarve/mp-config-consul.svg?branch=master)](https://travis-ci.org/rikcarve/mp-config-consul)
+[![codecov](https://codecov.io/gh/rikcarve/mp-config-consul/branch/master/graph/badge.svg)](https://codecov.io/gh/rikcarve/mp-config-consul)
 
 # mp-config-consul
 A eclipse microprofile config (1.2) extension which uses [Consul](https://www.consul.io/) as source.
@@ -20,11 +22,6 @@ Currently there are 2 values you can configure, either through Java system prope
 * **consul.host** url of your consul instance, e.g. "192.168.99.100:8500", default value is "localhost"
 * **consul.configsource.validity** how long to cache values (in seconds), default is 10s
 * **consul.prefix** key prefix to search value in consul
-
-## Wildfly 11 module
-Here's a link on how to configure Wildfly 11 (JEE 7) to use microprofile config as a module:
-
-https://github.com/wildfly-extras/wildfly-microprofile-config#install-on-wildfly
 
 
 ## Links
