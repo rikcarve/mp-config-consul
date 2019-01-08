@@ -1,10 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>ch.carve</groupId>
     <artifactId>mp-config-consul</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.3</version>
     <packaging>jar</packaging>
     <name>mp-config-consul</name>
     <description>Consul ConfigurationSource for eclipse microprofile config</description>
@@ -27,7 +25,8 @@
     <scm>
         <url>https://github.com/rikcarve/mp-config-consul.git</url>
         <connection>scm:git:https://github.com/rikcarve/mp-config-consul.git</connection>
-    </scm>
+      <tag>0.3</tag>
+  </scm>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
