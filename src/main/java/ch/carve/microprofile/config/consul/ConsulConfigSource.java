@@ -64,7 +64,7 @@ public class ConsulConfigSource implements ConfigSource {
 
     @Override
     public int getOrdinal() {
-        return 120;
+        return 220;
     }
 
     class TimedEntry {
