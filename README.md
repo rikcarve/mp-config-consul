@@ -27,3 +27,4 @@ Currently there are 2 values you can configure, either through Java system prope
 ## Links
 * https://microprofile.io/project/eclipse/microprofile-config
 * https://github.com/rikcarve/consulkv-maven-plugin
+* https://github.com/rikcarve/mp-config-db
