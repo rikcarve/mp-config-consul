@@ -28,6 +28,7 @@ class ConsulConfigSourceTest {
         configSource.config = new Configuration();
         configSource.client = mock(ConsulClient.class);
     }
+
     @Test
     void testGetProperties_empty() {
         ConsulConfigSource configSource = new ConsulConfigSource();
