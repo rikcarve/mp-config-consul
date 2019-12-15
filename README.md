@@ -15,15 +15,15 @@ The eclipse microprofile config framework is a simple yet powerful configuration
         <dependency>
             <groupId>ch.carve</groupId>
             <artifactId>mp-config-consul</artifactId>
-            <version>0.3</version>
+            <version>0.4</version>
         </dependency>
 ```
 
 ## Configuration
-Currently there are 2 values you can configure, either through Java system properties or environment variables:
-* **consul.host** url of your consul instance, e.g. "192.168.99.100:8500", default value is "localhost"
+Currently there are 3 values you can configure, either through Java system properties or environment variables:
+* **consul.host** url of your consul instance, e.g. "192.168.99.100:8500", default value is "localhost", variable substitution available.
 * **consul.configsource.validity** how long to cache values (in seconds), default is 30s
-* **consul.prefix** key prefix to search value in consul
+* **consul.prefix** key prefix to search value in consul, variable substitution available
 
 
 ## Links
