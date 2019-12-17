@@ -12,9 +12,9 @@ public class Configuration {
             .build();
 
     private StringSubstitutor substitutor = new StringSubstitutor(s -> getConfigValue(s, ""));
-    private String consulHost = substitutor.replace(getConfigValue("consul.host", "localhost"));
-    private long validity = Long.valueOf(getConfigValue("consul.configsource.validity", "30")) * 1000L;
-    private String prefix = addSlash(substitutor.replace(getConfigValue("consul.prefix", "")));
+    private String consulHost = substitutor.replace(getConfigValue("configsource.consul.host", "localhost"));
+    private long validity = Long.valueOf(getConfigValue("configsource.consul.validity", "30")) * 1000L;
+    private String prefix = addSlash(substitutor.replace(getConfigValue("configsource.consul.prefix", "")));
 
     public long getValidity() {
         return validity;
