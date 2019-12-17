@@ -14,10 +14,10 @@ public class ConfigurationTest {
 
     @Test
     public void testGetValidity_fromSys() throws Exception {
-        System.setProperty("consul.configsource.validity", "10");
+        System.setProperty("configsource.consul.validity", "10");
         Configuration config = new Configuration();
         assertEquals(10000, config.getValidity());
-        System.clearProperty("consul.configsource.validity");
+        System.clearProperty("configsource.consul.validity");
     }
 
     @Test
@@ -28,19 +28,19 @@ public class ConfigurationTest {
 
     @Test
     public void testGetPrefix_withSlash() throws Exception {
-        System.setProperty("consul.prefix", "jax");
+        System.setProperty("configsource.consul.prefix", "jax");
         Configuration config = new Configuration();
         assertEquals("jax/", config.getPrefix());
-        System.clearProperty("consul.prefix");
+        System.clearProperty("configsource.consul.prefix");
     }
 
     @Test
     public void testGetPrefix_withSubstitution() throws Exception {
-        System.setProperty("consul.prefix", "applications/${appname}");
+        System.setProperty("configsource.consul.prefix", "applications/${appname}");
         System.setProperty("appname", "jax");
         Configuration config = new Configuration();
         assertEquals("applications/jax/", config.getPrefix());
-        System.clearProperty("consul.prefix");
+        System.clearProperty("configsource.consul.prefix");
         System.clearProperty("appName");
     }
 
@@ -52,19 +52,19 @@ public class ConfigurationTest {
 
     @Test
     public void testGetConsulHost_fromSys() throws Exception {
-        System.setProperty("consul.host", "jax");
+        System.setProperty("configsource.consul.host", "jax");
         Configuration config = new Configuration();
         assertEquals("jax", config.getConsulHost());
-        System.clearProperty("consul.host");
+        System.clearProperty("configsource.consul.host");
     }
 
     @Test
     public void testGetConsulHost_fromSys_withSubstitution() throws Exception {
-        System.setProperty("consul.host", "${docker.host}");
+        System.setProperty("configsource.consul.host", "${docker.host}");
         System.setProperty("docker.host", "sub");
         Configuration config = new Configuration();
         assertEquals("sub", config.getConsulHost());
-        System.clearProperty("consul.host");
+        System.clearProperty("configsource.consul.host");
         System.clearProperty("docker.host");
     }
 

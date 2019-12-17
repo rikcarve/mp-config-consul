@@ -1,6 +1,7 @@
 package ch.carve.microprofile.config.consul;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.microprofile.config.spi.ConfigSource;
@@ -13,6 +14,7 @@ import com.ecwid.consul.v1.kv.model.GetValue;
 public class ConsulConfigSource implements ConfigSource {
 
     private static final Logger logger = LoggerFactory.getLogger(ConsulConfigSource.class);
+    private static final String DEFAULT_CONSUL_CONFIGSOURCE_ORDINAL = "550";
 
     Configuration config = new Configuration();
     ExpiringMap<String, String> cache = new ExpiringMap<>(config.getValidity());
@@ -30,6 +32,10 @@ public class ConsulConfigSource implements ConfigSource {
 
     @Override
     public String getValue(String propertyName) {
+        // use default if config_ordinal not found
+        if (CONFIG_ORDINAL.equals(propertyName)) {
+            return Optional.ofNullable(getConsulValue(propertyName)).orElse(DEFAULT_CONSUL_CONFIGSOURCE_ORDINAL);
+        }
         return cache.getOrCompute(propertyName,
                 p -> getConsulValue(p),
                 p -> logger.debug("consul getKV failed for key {}", p));
@@ -47,11 +53,6 @@ public class ConsulConfigSource implements ConfigSource {
     @Override
     public String getName() {
         return "ConsulConfigSource";
-    }
-
-    @Override
-    public int getOrdinal() {
-        return 550;
     }
 
 }
