@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/rikcarve/mp-config-consul.svg?branch=master)](https://travis-ci.org/rikcarve/mp-config-consul)
+[![Action Status](https://github.com/rikcarve/mp-config-consul/workflows/ci/badge.svg)](https://github.com/rikcarve/mp-config-consul/actions)
 [![codecov](https://codecov.io/gh/rikcarve/mp-config-consul/branch/master/graph/badge.svg)](https://codecov.io/gh/rikcarve/mp-config-consul)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/ch.carve/mp-config-consul/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/ch.carve/mp-config-consul/)
 
