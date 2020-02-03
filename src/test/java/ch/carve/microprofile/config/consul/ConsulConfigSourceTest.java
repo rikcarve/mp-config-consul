@@ -9,7 +9,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,12 +38,24 @@ class ConsulConfigSourceTest {
     }
 
     @Test
-    void testGetProperties_one() {
+    void testGetProperties_one_from_cache() {
         GetValue value = new GetValue();
         value.setValue(Base64.getEncoder().encodeToString("hello".getBytes()));
         when(configSource.client.getKVValue(anyString())).thenReturn(new Response<GetValue>(value, 0L, true, 0L));
         configSource.getValue("test");
         assertEquals(1, configSource.getProperties().size());
+    }
+
+    @Test
+    void testGetProperties_from_consul() {
+        System.setProperty("configsource.consul.prefix", "prefix");
+        configSource.config = new Configuration();
+        GetValue value = new GetValue();
+        value.setKey("test");
+        value.setValue(Base64.getEncoder().encodeToString("hello".getBytes()));
+        when(configSource.client.getKVValues(anyString())).thenReturn(new Response<List<GetValue>>(Arrays.asList(value), 0L, true, 0L));
+        assertEquals(1, configSource.getProperties().size());
+        System.clearProperty("configsource.consul.prefix");
     }
 
     @Test
@@ -78,6 +92,20 @@ class ConsulConfigSourceTest {
     void testGetValue_exception() {
         when(configSource.client.getKVValue(anyString())).thenThrow(RuntimeException.class);
         assertNull(configSource.getValue("test"));
+    }
+
+    @Test
+    void testOrdinal_default() {
+        when(configSource.client.getKVValue(anyString())).thenReturn(new Response<GetValue>(null, 0L, true, 0L));
+        assertEquals(550, configSource.getOrdinal());
+    }
+
+    @Test
+    void testOrdinal_overwrite() {
+        GetValue value = new GetValue();
+        value.setValue(Base64.getEncoder().encodeToString("200".getBytes()));
+        when(configSource.client.getKVValue(anyString())).thenReturn(new Response<GetValue>(value, 0L, true, 0L));
+        assertEquals(200, configSource.getOrdinal());
     }
 
 }
