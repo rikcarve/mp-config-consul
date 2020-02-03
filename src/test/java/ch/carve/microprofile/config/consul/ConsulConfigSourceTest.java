@@ -45,6 +45,12 @@ class ConsulConfigSourceTest {
     }
 
     @Test
+    void testGetProperties_with_null() {
+        when(configSource.client.getKVValue(anyString())).thenReturn(new Response<GetValue>(null, 0L, true, 0L));
+        assertEquals(0, configSource.getProperties().size());
+    }
+
+    @Test
     void testGetValue_null() {
         when(configSource.client.getKVValue(anyString())).thenReturn(new Response<GetValue>(null, 0L, true, 0L));
         assertNull(configSource.getValue("test"));

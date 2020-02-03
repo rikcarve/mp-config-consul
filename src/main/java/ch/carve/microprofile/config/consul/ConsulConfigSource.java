@@ -1,5 +1,6 @@
 package ch.carve.microprofile.config.consul;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,11 +24,18 @@ public class ConsulConfigSource implements ConfigSource {
 
     @Override
     public Map<String, String> getProperties() {
+        // only query for values if we have a prefix, otherwise just return cached
+        // entries
+        if (!config.getPrefix().isEmpty()) {
+            List<GetValue> values = client.getKVValues(config.getPrefix()).getValue();
+            values.forEach(v -> cache.put(v.getKey(), v.getValue()));
+        }
         return cache.getMap().entrySet()
                 .stream()
+                .filter(e -> e.getValue().get() != null)
                 .collect(Collectors.toMap(
                         e -> e.getKey(),
-                        e -> e.getValue().getValue()));
+                        e -> e.getValue().get()));
     }
 
     @Override
