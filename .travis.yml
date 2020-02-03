@@ -1,8 +1,0 @@
-language: java
-jdk:
-  - openjdk11
-install: true
-  
-script: mvn test
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
