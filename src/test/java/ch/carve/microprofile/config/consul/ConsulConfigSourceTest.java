@@ -48,14 +48,14 @@ class ConsulConfigSourceTest {
 
     @Test
     void testGetProperties_from_consul() {
-        System.setProperty("configsource.consul.prefix", "prefix");
+        System.setProperty("configsource.consul.list-all", "true");
         configSource.config = new Configuration();
         GetValue value = new GetValue();
         value.setKey("test");
         value.setValue(Base64.getEncoder().encodeToString("hello".getBytes()));
         when(configSource.client.getKVValues(anyString())).thenReturn(new Response<List<GetValue>>(Arrays.asList(value), 0L, true, 0L));
         assertEquals(1, configSource.getProperties().size());
-        System.clearProperty("configsource.consul.prefix");
+        System.clearProperty("configsource.consul.list-all");
     }
 
     @Test

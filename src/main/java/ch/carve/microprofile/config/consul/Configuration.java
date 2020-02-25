@@ -15,6 +15,7 @@ public class Configuration {
     private String consulHost = substitutor.replace(getConfigValue("configsource.consul.host", "localhost"));
     private long validity = Long.valueOf(getConfigValue("configsource.consul.validity", "30")) * 1000L;
     private String prefix = addSlash(substitutor.replace(getConfigValue("configsource.consul.prefix", "")));
+    private boolean listAll = Boolean.valueOf(getConfigValue("configsource.consul.list-all", "false"));
 
     public long getValidity() {
         return validity;
@@ -26,6 +27,10 @@ public class Configuration {
 
     public String getConsulHost() {
         return consulHost;
+    }
+
+    public boolean listAll() {
+        return listAll;
     }
 
     private String getConfigValue(String key, String defaultValue) {

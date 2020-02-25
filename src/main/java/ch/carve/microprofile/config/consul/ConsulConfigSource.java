@@ -24,9 +24,8 @@ public class ConsulConfigSource implements ConfigSource {
 
     @Override
     public Map<String, String> getProperties() {
-        // only query for values if we have a prefix, otherwise just return cached
-        // entries
-        if (!config.getPrefix().isEmpty()) {
+        // only query for values if explicitly enabled
+        if (config.listAll()) {
             List<GetValue> values = client.getKVValues(config.getPrefix()).getValue();
             values.forEach(v -> cache.put(v.getKey(), v.getValue()));
         }
