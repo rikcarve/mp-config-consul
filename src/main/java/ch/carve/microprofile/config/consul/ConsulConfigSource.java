@@ -40,22 +40,19 @@ public class ConsulConfigSource implements ConfigSource {
 
     @Override
     public String getValue(String propertyName) {
-        // use default if config_ordinal not found
-        if (CONFIG_ORDINAL.equals(propertyName)) {
-            return Optional.ofNullable(getConsulValue(propertyName)).orElse(DEFAULT_CONSUL_CONFIGSOURCE_ORDINAL);
-        }
-        return cache.getOrCompute(propertyName,
+        String value = cache.getOrCompute(propertyName,
                 p -> getConsulValue(p),
                 p -> logger.debug("consul getKV failed for key {}", p));
+        // use default if config_ordinal not found
+        if (CONFIG_ORDINAL.equals(propertyName)) {
+            return Optional.ofNullable(value).orElse(DEFAULT_CONSUL_CONFIGSOURCE_ORDINAL);
+        }
+        return value;
     }
 
     private String getConsulValue(String propertyName) {
         GetValue value = client.getKVValue(config.getPrefix() + propertyName).getValue();
-        if (value != null) {
-            return value.getDecodedValue();
-        } else {
-            return null;
-        }
+        return value == null ? null : value.getDecodedValue();
     }
 
     @Override
