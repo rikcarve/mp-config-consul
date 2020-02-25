@@ -24,7 +24,7 @@ Currently there are 3 values you can configure, either through Java system prope
 * **configsource.consul.host** url of your consul instance, e.g. "192.168.99.100:8500", default value is "localhost", variable substitution available.
 * **configsource.consul.validity** how long to cache values (in seconds), default is 30s
 * **configsource.consul.prefix** key prefix to search value in consul, variable substitution available
-* **configsource.consul.list-all** wheter getProperties() should query consul for all kv pairs, default is false
+* **configsource.consul.list-all** whether getProperties() should query consul for all kv pairs, default is false
 
 Note: these config values cannot be set in Quarkus application.properties!
 
