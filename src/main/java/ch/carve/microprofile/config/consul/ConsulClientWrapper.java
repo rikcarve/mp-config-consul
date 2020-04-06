@@ -23,7 +23,7 @@ public class ConsulClientWrapper {
 
     public ConsulClientWrapper(String host, String hosts, int port) {
         this.host = host;
-        if (hosts != null && !hosts.isBlank()) {
+        if (hosts != null && !hosts.isEmpty()) {
             peers = List.of(hosts.split(","));
         }
         this.port = port;
