@@ -3,6 +3,8 @@ package ch.carve.microprofile.config.consul;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockserver.model.HttpRequest.request;
+import static org.mockserver.model.HttpResponse.response;
 
 import java.util.List;
 import java.util.Map.Entry;
@@ -12,8 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.junit.jupiter.MockServerExtension;
-import org.mockserver.model.HttpRequest;
-import org.mockserver.model.HttpResponse;
 
 @ExtendWith(MockServerExtension.class)
 public class ConsulClientWrapperTest {
@@ -25,10 +25,10 @@ public class ConsulClientWrapperTest {
     @BeforeEach
     public void init(ClientAndServer client) {
         clientServer = client;
-        clientServer.when(HttpRequest.request().withPath("/v1/status/leader")).respond(HttpResponse.response().withBody("localhost"));
-        clientServer.when(HttpRequest.request().withPath("/v1/status/peers")).respond(HttpResponse.response().withBody("[\"localhost:8300\"]"));
-        clientServer.when(HttpRequest.request().withPath("/v1/kv/test")).respond(HttpResponse.response().withBody("[{\"LockIndex\":0,\"Key\":\"test\",\"Flags\":0,\"Value\":\"aGVsbG8=\",\"CreateIndex\":1,\"ModifyIndex\":2}]"));
-        clientServer.when(HttpRequest.request().withPath("/v1/kv/myapp")).respond(HttpResponse.response().withBody("[{\"LockIndex\":0,\"Key\":\"test\",\"Flags\":0,\"Value\":\"aGVsbG8=\",\"CreateIndex\":1,\"ModifyIndex\":2}]"));
+        clientServer.when(request().withPath("/v1/status/leader")).respond(response().withBody("localhost"));
+        clientServer.when(request().withPath("/v1/status/peers")).respond(response().withBody("[\"localhost:8300\"]"));
+        clientServer.when(request().withPath("/v1/kv/test")).respond(response().withBody("[{\"LockIndex\":0,\"Key\":\"test\",\"Flags\":0,\"Value\":\"aGVsbG8=\",\"CreateIndex\":1,\"ModifyIndex\":2}]"));
+        clientServer.when(request().withPath("/v1/kv/myapp")).respond(response().withBody("[{\"LockIndex\":0,\"Key\":\"test\",\"Flags\":0,\"Value\":\"aGVsbG8=\",\"CreateIndex\":1,\"ModifyIndex\":2}]"));
         clientWrapper = new ConsulClientWrapper("localhost", null, clientServer.getLocalPort());
     }
 

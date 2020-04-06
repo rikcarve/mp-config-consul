@@ -36,16 +36,25 @@ public class ConsulClientWrapper {
     }
 
     public String getValue(String key) {
-        GetValue value = getClient().getKVValue(key).getValue();
-        return value == null ? null : value.getDecodedValue();
-
+        try {
+            GetValue value = getClient().getKVValue(key).getValue();
+            return value == null ? null : value.getDecodedValue();
+        } catch (Exception e) {
+            client = null;
+            throw e;
+        }
     }
 
     public List<Entry<String, String>> getKeyValuePairs(String prefix) {
-        List<GetValue> values = getClient().getKVValues(prefix).getValue();
-        return values.stream()
-                .map(v -> new SimpleEntry<String, String>(v.getKey(), v.getDecodedValue()))
-                .collect(Collectors.toList());
+        try {
+            List<GetValue> values = getClient().getKVValues(prefix).getValue();
+            return values.stream()
+                    .map(v -> new SimpleEntry<String, String>(v.getKey(), v.getDecodedValue()))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            client = null;
+            throw e;
+        }
     }
 
     void initConsulClient() {
