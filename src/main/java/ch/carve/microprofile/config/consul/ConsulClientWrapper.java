@@ -1,6 +1,7 @@
 package ch.carve.microprofile.config.consul;
 
 import java.util.AbstractMap.SimpleEntry;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ public class ConsulClientWrapper {
     public ConsulClientWrapper(String host, String hosts, int port) {
         this.host = host;
         if (hosts != null && !hosts.isEmpty()) {
-            peers = List.of(hosts.split(","));
+            peers = Arrays.asList(hosts.split(","));
         }
         this.port = port;
     }

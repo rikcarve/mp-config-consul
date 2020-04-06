@@ -10,7 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.AbstractMap.SimpleEntry;
-import java.util.List;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ class ConsulConfigSourceTest {
     void testGetProperties_from_consul() {
         System.setProperty("configsource.consul.list-all", "true");
         configSource.config = new Configuration();
-        when(configSource.client.getKeyValuePairs(anyString())).thenReturn(List.of(new SimpleEntry<String, String>("test", "hello")));
+        when(configSource.client.getKeyValuePairs(anyString())).thenReturn(Arrays.asList(new SimpleEntry<String, String>("test", "hello")));
         assertEquals(1, configSource.getProperties().size());
         System.clearProperty("configsource.consul.list-all");
     }
