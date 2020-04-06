@@ -3,6 +3,7 @@ package ch.carve.microprofile.config.consul;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
@@ -15,6 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.junit.jupiter.MockServerExtension;
 
+import com.ecwid.consul.v1.OperationException;
+
 @ExtendWith(MockServerExtension.class)
 public class ConsulClientWrapperTest {
 
@@ -25,9 +28,9 @@ public class ConsulClientWrapperTest {
     @BeforeEach
     public void init(ClientAndServer client) {
         clientServer = client;
+        clientServer.reset();
         clientServer.when(request().withPath("/v1/status/leader")).respond(response().withBody("localhost"));
         clientServer.when(request().withPath("/v1/status/peers")).respond(response().withBody("[\"localhost:8300\"]"));
-        clientServer.when(request().withPath("/v1/kv/test")).respond(response().withBody("[{\"LockIndex\":0,\"Key\":\"test\",\"Flags\":0,\"Value\":\"aGVsbG8=\",\"CreateIndex\":1,\"ModifyIndex\":2}]"));
         clientServer.when(request().withPath("/v1/kv/myapp")).respond(response().withBody("[{\"LockIndex\":0,\"Key\":\"test\",\"Flags\":0,\"Value\":\"aGVsbG8=\",\"CreateIndex\":1,\"ModifyIndex\":2}]"));
         clientWrapper = new ConsulClientWrapper("localhost", null, clientServer.getLocalPort());
     }
@@ -51,6 +54,7 @@ public class ConsulClientWrapperTest {
 
     @Test
     public void testGetValue_found() {
+        clientServer.when(request().withPath("/v1/kv/test")).respond(response().withBody("[{\"LockIndex\":0,\"Key\":\"test\",\"Flags\":0,\"Value\":\"aGVsbG8=\",\"CreateIndex\":1,\"ModifyIndex\":2}]"));
         String value = clientWrapper.getValue("test");
         assertEquals("hello", value);
     }
@@ -65,6 +69,16 @@ public class ConsulClientWrapperTest {
     public void testGetKeyValuePairs() {
         List<Entry<String, String>> value = clientWrapper.getKeyValuePairs("myapp");
         assertEquals(1, value.size());
+    }
+
+    @Test
+    public void testGetValue_force_reconnect() {
+        clientServer.when(request().withPath("/v1/kv/test")).respond(response().withStatusCode(503));
+        assertThrows(OperationException.class, () -> clientWrapper.getValue("test"));
+        clientServer.clear(request().withPath("/v1/kv/test"));
+        clientServer.when(request().withPath("/v1/kv/test")).respond(response().withBody("[{\"LockIndex\":0,\"Key\":\"test\",\"Flags\":0,\"Value\":\"aGVsbG8=\",\"CreateIndex\":1,\"ModifyIndex\":2}]"));        
+        String value = clientWrapper.getValue("test");
+        assertEquals("hello", value);
     }
 
 }
