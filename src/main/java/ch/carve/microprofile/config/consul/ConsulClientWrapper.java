@@ -89,7 +89,7 @@ public class ConsulClientWrapper {
         return true;
     }
 
-    <T> T retry(int maxRetries, Supplier<T> supplier, Runnable onFailedAttempt) {
+    private <T> T retry(int maxRetries, Supplier<T> supplier, Runnable onFailedAttempt) {
         int retries = 0;
         RuntimeException lastException = null;
         while (retries <= maxRetries) {
