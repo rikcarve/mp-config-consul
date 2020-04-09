@@ -4,6 +4,7 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -37,17 +38,17 @@ public class ConsulClientWrapper {
 
     public String getValue(String key) {
         try {
-            GetValue value = getClient().getKVValue(key).getValue();
+            GetValue value = retry(2, () -> getClient().getKVValue(key).getValue(), () -> forceReconnect());
             return value == null ? null : value.getDecodedValue();
         } catch (Exception e) {
-            client = null;
+            forceReconnect();
             throw e;
         }
     }
 
     public List<Entry<String, String>> getKeyValuePairs(String prefix) {
         try {
-            List<GetValue> values = getClient().getKVValues(prefix).getValue();
+            List<GetValue> values = retry(2, () -> getClient().getKVValues(prefix).getValue(), () -> forceReconnect());
             return values.stream()
                     .map(v -> new SimpleEntry<String, String>(v.getKey(), v.getDecodedValue()))
                     .collect(Collectors.toList());
@@ -88,4 +89,24 @@ public class ConsulClientWrapper {
         return true;
     }
 
+    <T> T retry(int maxRetries, Supplier<T> supplier, Runnable onFailedAttempt) {
+        int retries = 0;
+        RuntimeException lastException = null;
+        while (retries <= maxRetries) {
+            try {
+                return supplier.get();
+            } catch (RuntimeException e) {
+                lastException = e;
+                onFailedAttempt.run();
+                retries++;
+            }
+        }
+        throw lastException;
+    }
+
+    private void forceReconnect() {
+        logger.info("force reconnect");
+        client = null;
+    }
+    
 }
