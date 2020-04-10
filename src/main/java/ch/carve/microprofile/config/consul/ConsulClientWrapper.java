@@ -53,7 +53,7 @@ public class ConsulClientWrapper {
                     .map(v -> new SimpleEntry<String, String>(v.getKey(), v.getDecodedValue()))
                     .collect(Collectors.toList());
         } catch (Exception e) {
-            client = null;
+            forceReconnect();
             throw e;
         }
     }

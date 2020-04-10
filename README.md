@@ -6,6 +6,10 @@
 A eclipse microprofile config (1.4) extension which uses [Consul](https://www.consul.io/) as source.
 
 > This project has been integrated in https://github.com/microprofile-extensions/config-ext
+>
+> Currently under discussion to be integrated in [smallrye-config](https://github.com/smallrye/smallrye-config/issues/187)
+>
+> Nevertheless, this project will be maintained until further notice.
 
 ## Overview
 The eclipse microprofile config framework is a simple yet powerful configuration framework for Jakarta EE. But most implementations only provide the system/env properties or property files as configuration source. Consuls key/value store is a widely used configuration source, so this small library provides an ConfigSource implementation which takes the values from consul. For performance reasons, the config values are cached.
@@ -20,7 +24,7 @@ The eclipse microprofile config framework is a simple yet powerful configuration
 ```
 
 ## Configuration
-Currently there are 3 values you can configure, either through Java system properties or environment variables:
+Currently there are 6 values you can configure, either through Java system properties or environment variables:
 * **configsource.consul.host** url of your consul agent instance, e.g. "192.168.99.100", default value is "localhost", variable substitution available.
 * **configsource.consul.hosts** list of consul servers, e.g. "192.168.99.100,192.168.99.101", default empty, variable substitution available.
 * **configsource.consul.port** port of consul, e.g. "8500", default value is "8500", variable substitution available.
