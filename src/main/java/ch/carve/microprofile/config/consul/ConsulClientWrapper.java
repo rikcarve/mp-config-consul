@@ -105,8 +105,7 @@ public class ConsulClientWrapper {
     }
 
     private void forceReconnect() {
-        logger.info("force reconnect");
         client = null;
     }
-    
+
 }

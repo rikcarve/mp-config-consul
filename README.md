@@ -3,7 +3,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/ch.carve/mp-config-consul/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/ch.carve/mp-config-consul/)
 
 # mp-config-consul
-A eclipse microprofile config (1.3) extension which uses [Consul](https://www.consul.io/) as source.
+A eclipse microprofile config (1.4) extension which uses [Consul](https://www.consul.io/) as source.
 
 > This project has been integrated in https://github.com/microprofile-extensions/config-ext
 
@@ -15,7 +15,7 @@ The eclipse microprofile config framework is a simple yet powerful configuration
         <dependency>
             <groupId>ch.carve</groupId>
             <artifactId>mp-config-consul</artifactId>
-            <version>0.7</version>
+            <version>0.8</version>
         </dependency>
 ```
 
