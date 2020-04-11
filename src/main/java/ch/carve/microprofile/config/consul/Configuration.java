@@ -17,6 +17,7 @@ public class Configuration {
     private int consulPort = Integer.valueOf(substitutor.replace(getConfigValue("configsource.consul.port", "8500")));
     private long validity = Long.valueOf(getConfigValue("configsource.consul.validity", "30")) * 1000L;
     private String prefix = addSlash(substitutor.replace(getConfigValue("configsource.consul.prefix", "")));
+    private String token = substitutor.replace(getConfigValue("configsource.consul.token", null));
     private boolean listAll = Boolean.valueOf(getConfigValue("configsource.consul.list-all", "false"));
 
     public long getValidity() {
@@ -25,6 +26,10 @@ public class Configuration {
 
     public String getPrefix() {
         return prefix;
+    }
+
+    public String getToken() {
+        return token;
     }
 
     public String getConsulHost() {

@@ -24,7 +24,7 @@ public class ConsulConfigSource implements ConfigSource {
     public Map<String, String> getProperties() {
         // only query for values if explicitly enabled
         if (config.listAll()) {
-            List<Entry<String, String>> values = client.getKeyValuePairs(config.getPrefix());
+            List<Entry<String, String>> values = client.getKeyValuePairs(config.getPrefix(), config.getToken());
             values.forEach(v -> cache.put(v.getKey(), v.getValue()));
         }
         return cache.getMap().entrySet()
@@ -38,7 +38,7 @@ public class ConsulConfigSource implements ConfigSource {
     @Override
     public String getValue(String propertyName) {
         String value = cache.getOrCompute(propertyName,
-                p -> client.getValue(config.getPrefix() + propertyName),
+                p -> client.getValue(config.getPrefix() + propertyName, config.getToken()),
                 p -> logger.debug("consul getKV failed for key {}", p));
         // use default if config_ordinal not found
         if (CONFIG_ORDINAL.equals(propertyName)) {

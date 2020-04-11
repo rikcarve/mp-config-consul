@@ -55,19 +55,19 @@ public class ConsulClientWrapperTest {
 
     @Test
     public void testGetValue_found() {
-        String value = clientWrapper.getValue("test");
+        String value = clientWrapper.getValue("test", null);
         assertEquals("hello", value);
     }
 
     @Test
     public void testGetValue_not_found() {
-        String value = clientWrapper.getValue("nope");
+        String value = clientWrapper.getValue("nope", null);
         assertNull(value);
     }
 
     @Test
     public void testGetKeyValuePairs() {
-        List<Entry<String, String>> value = clientWrapper.getKeyValuePairs("myapp");
+        List<Entry<String, String>> value = clientWrapper.getKeyValuePairs("myapp", null);
         assertEquals(1, value.size());
     }
 
@@ -75,10 +75,10 @@ public class ConsulClientWrapperTest {
     public void testGetValue_force_reconnect() {
         clientServer.clear(request().withPath("/v1/kv/test"));
         clientServer.when(request().withPath("/v1/kv/test")).respond(response().withStatusCode(503));
-        assertThrows(OperationException.class, () -> clientWrapper.getValue("test"));
+        assertThrows(OperationException.class, () -> clientWrapper.getValue("test", null));
         clientServer.clear(request().withPath("/v1/kv/test"));
         clientServer.when(request().withPath("/v1/kv/test")).respond(response().withBody("[{\"LockIndex\":0,\"Key\":\"test\",\"Flags\":0,\"Value\":\"aGVsbG8=\",\"CreateIndex\":1,\"ModifyIndex\":2}]"));        
-        String value = clientWrapper.getValue("test");
+        String value = clientWrapper.getValue("test", null);
         assertEquals("hello", value);
     }
 
