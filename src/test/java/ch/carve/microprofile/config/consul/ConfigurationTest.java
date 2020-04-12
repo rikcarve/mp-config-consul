@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 
 public class ConfigurationTest {
-    
+
     @Test
     public void testGetValidity() throws Exception {
         Configuration config = new Configuration();
@@ -48,7 +48,7 @@ public class ConfigurationTest {
     @Test
     public void testGetConsulHost() throws Exception {
         Configuration config = new Configuration();
-        assertEquals("localhost", config.getConsulHost());
+        assertEquals("", config.getConsulHost());
     }
 
     @Test

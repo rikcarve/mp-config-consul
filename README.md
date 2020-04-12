@@ -19,13 +19,13 @@ The eclipse microprofile config framework is a simple yet powerful configuration
         <dependency>
             <groupId>ch.carve</groupId>
             <artifactId>mp-config-consul</artifactId>
-            <version>0.8</version>
+            <version>0.9</version>
         </dependency>
 ```
 
 ## Configuration
 Currently there are 6 values you can configure, either through Java system properties or environment variables:
-* **configsource.consul.host** url of your consul agent instance, e.g. "192.168.99.100", default value is "localhost", variable substitution available.
+* **configsource.consul.host** url of your consul agent instance, e.g. "192.168.99.100", default empty, variable substitution available.
 * **configsource.consul.hosts** list of consul servers, e.g. "192.168.99.100,192.168.99.101", default empty, variable substitution available.
 * **configsource.consul.port** port of consul, e.g. "8500", default value is "8500", variable substitution available.
 * **configsource.consul.validity** how long to cache values (in seconds), default is 30s
@@ -33,7 +33,9 @@ Currently there are 6 values you can configure, either through Java system prope
 * **configsource.consul.list-all** whether getProperties() should query consul for all kv pairs, default is false
 * **configsource.consul.token** token that will be used to retrieve key/values from consul. Default is empty and retrieval is done without token.
 
-Note: these config values cannot be set in Quarkus application.properties, you need to pass them as JVM arguments like this `-Dconfigsource.consul.host=consul.mycompany.com`
+> Note: these config values cannot be set in Quarkus application.properties, you need to pass them as JVM arguments like this `-Dconfigsource.consul.host=consul.mycompany.com` or through environment variables.
+
+> Note: if both host and hosts are empty, this configsource is disabled!
 
 ## Ordinal
 Config sources have priorities called ordinal. This config source has ordinal 550, but can be overriden with setting 'config_ordinal' in this source (including prefix if defined)

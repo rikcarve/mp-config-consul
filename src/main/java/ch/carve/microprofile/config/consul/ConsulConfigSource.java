@@ -17,13 +17,13 @@ public class ConsulConfigSource implements ConfigSource {
 
     Configuration config = new Configuration();
     ExpiringMap<String, String> cache = new ExpiringMap<>(config.getValidity());
-
+    boolean isDisabled = config.getConsulHost().isEmpty() && config.getConsulHostList().isEmpty();
     ConsulClientWrapper client = new ConsulClientWrapper(config.getConsulHost(), config.getConsulHostList(), config.getConsulPort(), config.getToken());
 
     @Override
     public Map<String, String> getProperties() {
         // only query for values if explicitly enabled
-        if (config.listAll()) {
+        if (!isDisabled && config.listAll()) {
             List<Entry<String, String>> values = client.getKeyValuePairs(config.getPrefix());
             values.forEach(v -> cache.put(v.getKey(), v.getValue()));
         }
@@ -37,6 +37,9 @@ public class ConsulConfigSource implements ConfigSource {
 
     @Override
     public String getValue(String propertyName) {
+        if (isDisabled) {
+            return null;
+        }
         String value = cache.getOrCompute(propertyName,
                 p -> client.getValue(config.getPrefix() + propertyName),
                 p -> logger.debug("consul getKV failed for key {}", p));

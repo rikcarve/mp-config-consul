@@ -12,7 +12,7 @@ public class Configuration {
             .build();
 
     private StringSubstitutor substitutor = new StringSubstitutor(s -> getConfigValue(s, ""));
-    private String consulHost = substitutor.replace(getConfigValue("configsource.consul.host", "localhost"));
+    private String consulHost = substitutor.replace(getConfigValue("configsource.consul.host", ""));
     private String consulHostList = substitutor.replace(getConfigValue("configsource.consul.hosts", ""));
     private int consulPort = Integer.valueOf(substitutor.replace(getConfigValue("configsource.consul.port", "8500")));
     private long validity = Long.valueOf(getConfigValue("configsource.consul.validity", "30")) * 1000L;

@@ -3,7 +3,7 @@ package ch.carve.microprofile.config.consul;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -21,6 +21,7 @@ class ConsulConfigSourceTest {
 
     @BeforeEach
     public void init() {
+        System.setProperty("configsource.consul.host", "localhost");
         configSource = new ConsulConfigSource();
         configSource.config = new Configuration();
         configSource.client = mock(ConsulClientWrapper.class);
@@ -51,6 +52,7 @@ class ConsulConfigSourceTest {
     @Test
     void testGetProperties_with_null() {
         when(configSource.client.getValue(anyString())).thenReturn(null);
+        configSource.getValue("test");
         assertEquals(0, configSource.getProperties().size());
     }
 
