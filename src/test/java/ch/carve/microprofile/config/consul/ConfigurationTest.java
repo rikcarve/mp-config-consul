@@ -1,6 +1,7 @@
 package ch.carve.microprofile.config.consul;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
@@ -56,6 +57,20 @@ public class ConfigurationTest {
         Configuration config = new Configuration();
         assertEquals("jax", config.getConsulHost());
         System.clearProperty("configsource.consul.host");
+    }
+
+    @Test
+    public void testGetToken() throws Exception {
+        System.setProperty("configsource.consul.token", "token");
+        Configuration config = new Configuration();
+        assertEquals("token", config.getToken());
+        System.clearProperty("configsource.consul.token");
+    }
+
+    @Test
+    public void testGetToken_not_configured() throws Exception {
+        Configuration config = new Configuration();
+        assertNull(config.getToken());
     }
 
     @Test

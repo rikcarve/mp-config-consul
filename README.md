@@ -31,8 +31,9 @@ Currently there are 6 values you can configure, either through Java system prope
 * **configsource.consul.validity** how long to cache values (in seconds), default is 30s
 * **configsource.consul.prefix** key prefix to search value in consul, variable substitution available
 * **configsource.consul.list-all** whether getProperties() should query consul for all kv pairs, default is false
+* **configsource.consul.token** token that will be used to retrieve key/values from consul. Default is empty and retrieval is done without token.
 
-Note: these config values cannot be set in Quarkus application.properties!
+Note: these config values cannot be set in Quarkus application.properties, you need to pass them as JVM arguments like this `-Dconfigsource.consul.host=consul.mycompany.com`
 
 ## Ordinal
 Config sources have priorities called ordinal. This config source has ordinal 550, but can be overriden with setting 'config_ordinal' in this source (including prefix if defined)

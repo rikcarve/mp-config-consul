@@ -18,7 +18,7 @@ public class ConsulConfigSource implements ConfigSource {
     Configuration config = new Configuration();
     ExpiringMap<String, String> cache = new ExpiringMap<>(config.getValidity());
 
-    ConsulClientWrapper client = new ConsulClientWrapper(config.getConsulHost(), config.getConsulHostList(), config.getConsulPort());
+    ConsulClientWrapper client = new ConsulClientWrapper(config.getConsulHost(), config.getConsulHostList(), config.getConsulPort(), config.getToken());
 
     @Override
     public Map<String, String> getProperties() {

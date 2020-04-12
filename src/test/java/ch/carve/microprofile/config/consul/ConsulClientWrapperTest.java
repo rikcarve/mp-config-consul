@@ -32,8 +32,9 @@ public class ConsulClientWrapperTest {
         clientServer.when(request().withPath("/v1/status/leader")).respond(response().withBody("localhost"));
         clientServer.when(request().withPath("/v1/status/peers")).respond(response().withBody("[\"localhost:8300\"]"));
         clientServer.when(request().withPath("/v1/kv/test")).respond(response().withBody("[{\"LockIndex\":0,\"Key\":\"test\",\"Flags\":0,\"Value\":\"aGVsbG8=\",\"CreateIndex\":1,\"ModifyIndex\":2}]"));
+        clientServer.when(request().withPath("/v1/kv/testFromToken").withQueryStringParameter("token", "tokenValue")).respond(response().withBody("[{\"LockIndex\":0,\"Key\":\"testFromToken\",\"Flags\":0,\"Value\":\"aGVsbG8=\",\"CreateIndex\":1,\"ModifyIndex\":2}]"));
         clientServer.when(request().withPath("/v1/kv/myapp")).respond(response().withBody("[{\"LockIndex\":0,\"Key\":\"test\",\"Flags\":0,\"Value\":\"aGVsbG8=\",\"CreateIndex\":1,\"ModifyIndex\":2}]"));
-        clientWrapper = new ConsulClientWrapper("localhost", null, clientServer.getLocalPort());
+        clientWrapper = new ConsulClientWrapper("localhost", null, clientServer.getLocalPort(), null);
     }
 
     @Test
@@ -43,14 +44,21 @@ public class ConsulClientWrapperTest {
 
     @Test
     public void testGetClient_peers() {
-        clientWrapper = new ConsulClientWrapper(null, "localhost", clientServer.getLocalPort());
+        clientWrapper = new ConsulClientWrapper(null, "localhost", clientServer.getLocalPort(), null);
         assertNotNull(clientWrapper.getClient());
     }
 
     @Test
     public void testGetClient_hosts_1stnotAvail() {
-        clientWrapper = new ConsulClientWrapper(null, "localhost2,localhost", clientServer.getLocalPort());
+        clientWrapper = new ConsulClientWrapper(null, "localhost2,localhost", clientServer.getLocalPort(), null);
         assertNotNull(clientWrapper.getClient());
+    }
+
+    @Test
+    public void testGetValue_with_token_found() {
+        clientWrapper = new ConsulClientWrapper("localhost", null, clientServer.getLocalPort(), "tokenValue");
+        String value = clientWrapper.getValue("testFromToken");
+        assertEquals("hello", value);
     }
 
     @Test

@@ -3,7 +3,7 @@ package ch.carve.microprofile.config.consul;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -64,6 +64,15 @@ class ConsulConfigSourceTest {
     void testGetValue() {
         when(configSource.client.getValue(anyString())).thenReturn("hello");
         assertEquals("hello", configSource.getValue("test"));
+    }
+
+    @Test
+    void testGetValue_token_configured() {
+        System.setProperty("configsource.consul.token", "token");
+        configSource.config = new Configuration();
+        when(configSource.client.getValue(anyString())).thenReturn("hello");
+        assertEquals("hello", configSource.getValue("test"));
+        System.clearProperty("configsource.consul.token");
     }
 
     @Test

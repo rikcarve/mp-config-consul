@@ -21,14 +21,16 @@ public class ConsulClientWrapper {
     private String host;
     private List<String> peers = null;
     private int port;
+    private String token;
     ConsulClient client = null;
 
-    public ConsulClientWrapper(String host, String hosts, int port) {
+    public ConsulClientWrapper(String host, String hosts, int port, String token) {
         this.host = host;
         if (hosts != null && !hosts.isEmpty()) {
             peers = Arrays.asList(hosts.split(","));
         }
         this.port = port;
+        this.token = token;
     }
 
     public ConsulClient getClient() {
@@ -38,7 +40,7 @@ public class ConsulClientWrapper {
 
     public String getValue(String key) {
         try {
-            GetValue value = retry(2, () -> getClient().getKVValue(key).getValue(), () -> forceReconnect());
+            GetValue value = retry(2, () -> getClient().getKVValue(key, token).getValue(), () -> forceReconnect());
             return value == null ? null : value.getDecodedValue();
         } catch (Exception e) {
             forceReconnect();
@@ -48,7 +50,7 @@ public class ConsulClientWrapper {
 
     public List<Entry<String, String>> getKeyValuePairs(String prefix) {
         try {
-            List<GetValue> values = retry(2, () -> getClient().getKVValues(prefix).getValue(), () -> forceReconnect());
+            List<GetValue> values = retry(2, () -> getClient().getKVValues(prefix, token).getValue(), () -> forceReconnect());
             return values.stream()
                     .map(v -> new SimpleEntry<String, String>(v.getKey(), v.getDecodedValue()))
                     .collect(Collectors.toList());
