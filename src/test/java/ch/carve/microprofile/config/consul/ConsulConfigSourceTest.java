@@ -34,7 +34,7 @@ class ConsulConfigSourceTest {
 
     @Test
     void testGetProperties_one_from_cache() {
-        when(configSource.client.getValue(anyString(), isNull())).thenReturn("hello");
+        when(configSource.client.getValue(anyString())).thenReturn("hello");
         configSource.getValue("test");
         assertEquals(1, configSource.getProperties().size());
     }
@@ -43,26 +43,26 @@ class ConsulConfigSourceTest {
     void testGetProperties_from_consul() {
         System.setProperty("configsource.consul.list-all", "true");
         configSource.config = new Configuration();
-        when(configSource.client.getKeyValuePairs(anyString(), isNull())).thenReturn(Arrays.asList(new SimpleEntry<String, String>("test", "hello")));
+        when(configSource.client.getKeyValuePairs(anyString())).thenReturn(Arrays.asList(new SimpleEntry<String, String>("test", "hello")));
         assertEquals(1, configSource.getProperties().size());
         System.clearProperty("configsource.consul.list-all");
     }
 
     @Test
     void testGetProperties_with_null() {
-        when(configSource.client.getValue(anyString(), isNull())).thenReturn(null);
+        when(configSource.client.getValue(anyString())).thenReturn(null);
         assertEquals(0, configSource.getProperties().size());
     }
 
     @Test
     void testGetValue_null() {
-        when(configSource.client.getValue(anyString(), isNull())).thenReturn(null);
+        when(configSource.client.getValue(anyString())).thenReturn(null);
         assertNull(configSource.getValue("test"));
     }
 
     @Test
     void testGetValue() {
-        when(configSource.client.getValue(anyString(), isNull())).thenReturn("hello");
+        when(configSource.client.getValue(anyString())).thenReturn("hello");
         assertEquals("hello", configSource.getValue("test"));
     }
 
@@ -70,34 +70,34 @@ class ConsulConfigSourceTest {
     void testGetValue_token_configured() {
         System.setProperty("configsource.consul.token", "token");
         configSource.config = new Configuration();
-        when(configSource.client.getValue(anyString(), eq("token"))).thenReturn("hello");
+        when(configSource.client.getValue(anyString())).thenReturn("hello");
         assertEquals("hello", configSource.getValue("test"));
         System.clearProperty("configsource.consul.token");
     }
 
     @Test
     void testGetValue_cache() {
-        when(configSource.client.getValue(anyString(), isNull())).thenReturn("hello");
+        when(configSource.client.getValue(anyString())).thenReturn("hello");
         configSource.getValue("test");
         configSource.getValue("test");
-        verify(configSource.client, times(1)).getValue(anyString(), isNull());
+        verify(configSource.client, times(1)).getValue(anyString());
     }
 
     @Test
     void testGetValue_exception() {
-        when(configSource.client.getValue(anyString(), isNull())).thenThrow(RuntimeException.class);
+        when(configSource.client.getValue(anyString())).thenThrow(RuntimeException.class);
         assertNull(configSource.getValue("test"));
     }
 
     @Test
     void testOrdinal_default() {
-        when(configSource.client.getValue(anyString(), isNull())).thenReturn(null);
+        when(configSource.client.getValue(anyString())).thenReturn(null);
         assertEquals(550, configSource.getOrdinal());
     }
 
     @Test
     void testOrdinal_overwrite() {
-        when(configSource.client.getValue(anyString(), isNull())).thenReturn("200");
+        when(configSource.client.getValue(anyString())).thenReturn("200");
         assertEquals(200, configSource.getOrdinal());
     }
 

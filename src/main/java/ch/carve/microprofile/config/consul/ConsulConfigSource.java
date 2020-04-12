@@ -18,13 +18,13 @@ public class ConsulConfigSource implements ConfigSource {
     Configuration config = new Configuration();
     ExpiringMap<String, String> cache = new ExpiringMap<>(config.getValidity());
 
-    ConsulClientWrapper client = new ConsulClientWrapper(config.getConsulHost(), config.getConsulHostList(), config.getConsulPort());
+    ConsulClientWrapper client = new ConsulClientWrapper(config.getConsulHost(), config.getConsulHostList(), config.getConsulPort(), config.getToken());
 
     @Override
     public Map<String, String> getProperties() {
         // only query for values if explicitly enabled
         if (config.listAll()) {
-            List<Entry<String, String>> values = client.getKeyValuePairs(config.getPrefix(), config.getToken());
+            List<Entry<String, String>> values = client.getKeyValuePairs(config.getPrefix());
             values.forEach(v -> cache.put(v.getKey(), v.getValue()));
         }
         return cache.getMap().entrySet()
@@ -38,7 +38,7 @@ public class ConsulConfigSource implements ConfigSource {
     @Override
     public String getValue(String propertyName) {
         String value = cache.getOrCompute(propertyName,
-                p -> client.getValue(config.getPrefix() + propertyName, config.getToken()),
+                p -> client.getValue(config.getPrefix() + propertyName),
                 p -> logger.debug("consul getKV failed for key {}", p));
         // use default if config_ordinal not found
         if (CONFIG_ORDINAL.equals(propertyName)) {
