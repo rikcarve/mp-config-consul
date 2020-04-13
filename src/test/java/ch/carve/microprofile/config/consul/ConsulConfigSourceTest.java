@@ -28,6 +28,11 @@ class ConsulConfigSourceTest {
     }
 
     @Test
+    void testGetName() {
+        assertEquals("ConsulConfigSource", configSource.getName());
+    }
+
+    @Test
     void testGetProperties_empty() {
         ConsulConfigSource configSource = new ConsulConfigSource();
         assertTrue(configSource.getProperties().isEmpty());
@@ -54,6 +59,12 @@ class ConsulConfigSourceTest {
         when(configSource.client.getValue(anyString())).thenReturn(null);
         configSource.getValue("test");
         assertEquals(0, configSource.getProperties().size());
+    }
+
+    @Test
+    void testGetValue_disabled_return_null() {
+        System.clearProperty("configsource.consul.host");
+        assertNull(configSource.getValue("test"));
     }
 
     @Test

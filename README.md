@@ -19,7 +19,7 @@ The eclipse microprofile config framework is a simple yet powerful configuration
         <dependency>
             <groupId>ch.carve</groupId>
             <artifactId>mp-config-consul</artifactId>
-            <version>0.9</version>
+            <version>0.10</version>
         </dependency>
 ```
 
