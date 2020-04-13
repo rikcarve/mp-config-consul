@@ -1,5 +1,8 @@
 package ch.carve.microprofile.config.consul;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import java.util.List;
@@ -40,8 +43,11 @@ public class ConsulClientWrapper {
 
     public String getValue(String key) {
         try {
-            GetValue value = retry(2, () -> getClient().getKVValue(key, token).getValue(), () -> forceReconnect());
+            String encodedKey = URLEncoder.encode(key, StandardCharsets.UTF_8.name());
+            GetValue value = retry(2, () -> getClient().getKVValue(encodedKey, token).getValue(), () -> forceReconnect());
             return value == null ? null : value.getDecodedValue();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         } catch (Exception e) {
             forceReconnect();
             throw e;
@@ -50,10 +56,13 @@ public class ConsulClientWrapper {
 
     public List<Entry<String, String>> getKeyValuePairs(String prefix) {
         try {
-            List<GetValue> values = retry(2, () -> getClient().getKVValues(prefix, token).getValue(), () -> forceReconnect());
+            String encodedPrefix = URLEncoder.encode(prefix, StandardCharsets.UTF_8.name());
+            List<GetValue> values = retry(2, () -> getClient().getKVValues(encodedPrefix, token).getValue(), () -> forceReconnect());
             return values.stream()
                     .map(v -> new SimpleEntry<String, String>(v.getKey(), v.getDecodedValue()))
                     .collect(Collectors.toList());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         } catch (Exception e) {
             forceReconnect();
             throw e;
