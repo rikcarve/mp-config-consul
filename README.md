@@ -3,13 +3,17 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/ch.carve/mp-config-consul/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/ch.carve/mp-config-consul/)
 
 # mp-config-consul
-A eclipse microprofile config (1.4) extension which uses [Consul](https://www.consul.io/) as source.
+A eclipse microprofile config extension which uses [Consul](https://www.consul.io/) as source.
 
 > This project has been integrated in https://github.com/microprofile-extensions/config-ext
 >
 > Currently under discussion to be integrated in [smallrye-config](https://github.com/smallrye/smallrye-config/issues/187)
 >
 > Nevertheless, this project will be maintained until further notice.
+
+## Versions
+0.10 -> Microprofile config 1.4 \
+0.11 -> Microprofile config 2.0
 
 ## Overview
 The eclipse microprofile config framework is a simple yet powerful configuration framework for Jakarta EE. But most implementations only provide the system/env properties or property files as configuration source. Consuls key/value store is a widely used configuration source, so this small library provides an ConfigSource implementation which takes the values from consul. For performance reasons, the config values are cached.
@@ -19,7 +23,7 @@ The eclipse microprofile config framework is a simple yet powerful configuration
         <dependency>
             <groupId>ch.carve</groupId>
             <artifactId>mp-config-consul</artifactId>
-            <version>0.10</version>
+            <version>0.11</version>
         </dependency>
 ```
 
@@ -32,6 +36,8 @@ Currently there are 6 values you can configure, either through Java system prope
 * **configsource.consul.prefix** key prefix to search value in consul, variable substitution available
 * **configsource.consul.list-all** whether getProperties() should query consul for all kv pairs, default is false
 * **configsource.consul.token** token that will be used to retrieve key/values from consul. Default is empty and retrieval is done without token.
+
+> Note: Since mp-config-consul 0.11 (mp-config 2.0) variable substitution is now part of microprofile-config (property expressions)
 
 > Note: these config values cannot be set in Quarkus application.properties, you need to pass them as JVM arguments like this `-Dconfigsource.consul.host=consul.mycompany.com` or through environment variables.
 

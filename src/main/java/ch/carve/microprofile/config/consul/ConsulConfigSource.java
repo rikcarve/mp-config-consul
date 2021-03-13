@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.microprofile.config.spi.ConfigSource;
@@ -33,6 +34,11 @@ public class ConsulConfigSource implements ConfigSource {
                 .collect(Collectors.toMap(
                         e -> e.getKey(),
                         e -> e.getValue().get()));
+    }
+
+    @Override
+    public Set<String> getPropertyNames() {
+        return getProperties().keySet();
     }
 
     @Override
