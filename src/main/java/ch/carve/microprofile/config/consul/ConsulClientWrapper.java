@@ -31,6 +31,10 @@ public class ConsulClientWrapper {
         this.host = host;
         if (hosts != null && !hosts.isEmpty()) {
             peers = Arrays.asList(hosts.split(","));
+            // add host (usually local agent) to the front for prioritization
+            if (host != null && !host.isEmpty()) {
+                peers.add(0, host);
+            }
         }
         this.port = port;
         this.token = token;
