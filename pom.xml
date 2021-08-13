@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ch.carve</groupId>
     <artifactId>mp-config-consul</artifactId>
-    <version>0.12</version>
+    <version>0.13</version>
     <packaging>jar</packaging>
     <name>mp-config-consul</name>
     <description>Consul ConfigurationSource for eclipse microprofile config</description>
@@ -45,6 +45,26 @@
             <groupId>com.ecwid.consul</groupId>
             <artifactId>consul-api</artifactId>
             <version>1.4.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpcore</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.14</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
