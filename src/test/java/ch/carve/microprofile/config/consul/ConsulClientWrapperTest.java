@@ -51,6 +51,12 @@ public class ConsulClientWrapperTest {
     }
 
     @Test
+    public void testGetClient_host_and_peers() {
+        clientWrapper = new ConsulClientWrapper("localhost", "localhost", clientServer.getLocalPort(), null);
+        assertNotNull(clientWrapper.getClient());
+    }
+
+    @Test
     public void testGetClient_hosts_1stnotAvail() {
         clientWrapper = new ConsulClientWrapper(null, "localhost2,localhost", clientServer.getLocalPort(), null);
         assertNotNull(clientWrapper.getClient());

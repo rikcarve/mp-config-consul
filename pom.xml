@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ch.carve</groupId>
     <artifactId>mp-config-consul</artifactId>
-    <version>0.13</version>
+    <version>0.14</version>
     <packaging>jar</packaging>
     <name>mp-config-consul</name>
     <description>Consul ConfigurationSource for eclipse microprofile config</description>

@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
@@ -30,7 +31,7 @@ public class ConsulClientWrapper {
     public ConsulClientWrapper(String host, String hosts, int port, String token) {
         this.host = host;
         if (hosts != null && !hosts.isEmpty()) {
-            peers = Arrays.asList(hosts.split(","));
+            peers = new ArrayList<>(Arrays.asList(hosts.split(",")));
             // add host (usually local agent) to the front for prioritization
             if (host != null && !host.isEmpty()) {
                 peers.add(0, host);
