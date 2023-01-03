@@ -46,6 +46,10 @@ public class ConsulConfigSource implements ConfigSource {
         if (isDisabled) {
             return null;
         }
+        // quarkus queries with and without profile
+        if (propertyName != null && propertyName.startsWith("%")) {
+            return null;
+        }
         String value = cache.getOrCompute(propertyName,
                 p -> client.getValue(config.getPrefix() + propertyName),
                 p -> logger.debug("consul getKV failed for key {}", p));
